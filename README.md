@@ -32,6 +32,6 @@
 ### 1. Installation
 
 ```bash
-git clone [https://github.com/your-username/zerocloud.git](https://github.com/your-username/zerocloud.git)
+git clone https://github.com/test-book-by-sangam/zerocloud.git
 cd zerocloud
 npm install
