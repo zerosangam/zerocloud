@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeroCloud - Next-Gen Unlimited Cloud Engine</title>
+    <meta name="description" content="ZeroCloud is a personal file vault: upload, preview, search and manage your files with a fast, secure dashboard.">
+    <meta name="theme-color" content="#060812">
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Glassmorphic Auth Overlay -->
+    <div id="auth-screen" class="auth-overlay" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+        <div class="auth-box">
+            <div class="brand-logo center">
+                <i class="fa-solid fa-bolt-lightning glow-icon" aria-hidden="true"></i>
+                <span>Zero<strong>Cloud</strong></span>
+            </div>
+            <h2 id="auth-title">Welcome Back</h2>
+            <p id="auth-subtitle">Zero limits. Powered by Telegram Storage Engine.</p>
+
+            <form id="auth-form" novalidate>
+                <div class="input-group">
+                    <i class="fa-solid fa-user" aria-hidden="true"></i>
+                    <label for="auth-username" class="sr-only">Username</label>
+                    <input type="text" id="auth-username" placeholder="Username enter karein" autocomplete="username" minlength="3" maxlength="32" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                    <label for="auth-password" class="sr-only">Password</label>
+                    <input type="password" id="auth-password" placeholder="Password enter karein (min 8 characters)" autocomplete="current-password" minlength="8" required>
+                </div>
+                <div id="auth-error" class="auth-error hidden" role="alert"></div>
+                <button type="submit" id="auth-btn" class="btn btn-glow">Login to Vault</button>
+            </form>
+
+            <div class="auth-footer">
+                <span id="auth-toggle-text">Account nahi hai?</span>
+                <a href="#" id="auth-toggle-btn">Register Karein</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand-logo">
+                <i class="fa-solid fa-bolt-lightning glow-icon" aria-hidden="true"></i>
+                <span>Zero<strong>Cloud</strong></span>
+            </div>
+
+            <div class="nav-search">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <label for="search-input" class="sr-only">Search files</label>
+                <input type="search" id="search-input" placeholder="Search files instantly...">
+            </div>
+
+            <div class="user-profile">
+                <div class="user-info">
+                    <span id="username-display">User</span>
+                    <small>unlimited storage</small>
+                </div>
+                <button id="btn-logout" class="icon-btn danger-btn" title="Logout" aria-label="Logout">
+                    <i class="fa-solid fa-power-off" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <main class="dashboard-container">
+
+        <!-- Upload Dropzone Section -->
+        <section class="upload-wrapper" aria-label="Upload files">
+            <div class="dropzone-card" id="dropzone">
+                <input type="file" id="file-input" hidden>
+
+                <!-- Initial Idle View -->
+                <div class="dropzone-body" id="dropzone-idle" tabindex="0" role="button" aria-label="Click or drop a file to upload">
+                    <div class="upload-icon-ring">
+                        <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                    </div>
+                    <h3>Drag & Drop Files Here</h3>
+                    <p>max 40 mb per file</p>
+                </div>
+
+                <!-- Staging View -->
+                <div class="dropzone-staging hidden" id="dropzone-staging">
+                    <div class="file-badge">
+                        <i class="fa-solid fa-file-shield" aria-hidden="true"></i>
+                        <div>
+                            <h4 id="stage-file-name">filename.ext</h4>
+                            <span id="stage-file-size">0 MB</span>
+                        </div>
+                    </div>
+                    <div class="stage-actions">
+                        <button class="btn btn-secondary" id="btn-cancel-stage">Cancel</button>
+                        <button class="btn btn-glow" id="btn-start-upload"><i class="fa-solid fa-rocket" aria-hidden="true"></i> Upload Now</button>
+                    </div>
+                </div>
+
+                <!-- Progress Bar View -->
+                <div class="dropzone-progress hidden" id="dropzone-progress">
+                    <div class="progress-labels">
+                        <span>Uploading to Telegram Cloud Storage Engine...</span>
+                        <strong id="progress-percent">0%</strong>
+                    </div>
+                    <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Grid -->
+<section class="stats-grid" aria-label="Storage statistics">
+    <div class="stat-card">
+        <div class="stat-icon cyan"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+        <div>
+            <h4>Total Storage Used</h4>
+            <h2 id="stat-storage">0 MB</h2>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <!-- 🛠️ FIX: 'fa-files' ko badal kar 'fa-folder-open' ya 'fa-file-lines' kiya -->
+        <div class="stat-icon purple"><i class="fa-solid fa-folder-open" aria-hidden="true"></i></div>
+        <div>
+            <h4>Total Vault Files</h4>
+            <h2 id="stat-count">0</h2>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon green"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+        <div>
+            <h4>Cloud Protection</h4>
+            <h2>Active (Encrypted)</h2>
+        </div>
+    </div>
+</section>
+        <!-- Category Filters & File Explorer -->
+        <section class="explorer-section">
+            <div class="explorer-header">
+                <h2>Vault Storage</h2>
+                <div class="category-pills" role="tablist" aria-label="Filter by category">
+                    <button class="pill active" data-cat="all" role="tab" aria-selected="true">All Files</button>
+                    <button class="pill" data-cat="images" role="tab" aria-selected="false">Images</button>
+                    <button class="pill" data-cat="videos" role="tab" aria-selected="false">Videos</button>
+                    <button class="pill" data-cat="audios" role="tab" aria-selected="false">Audios</button>
+                    <button class="pill" data-cat="documents" role="tab" aria-selected="false">Documents</button>
+                </div>
+            </div>
+
+            <!-- Dynamic File Cards Grid -->
+            <div class="files-grid" id="files-grid" aria-live="polite"></div>
+
+            <!-- Empty State -->
+            <div class="empty-box hidden" id="empty-state">
+                <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+                <h3>Not! uplod</h3>
+                <!-- <p>Nayi file upload karne ke liye uper diye gaye dropzone ka use karein.</p> -->
+            </div>
+        </section>
+    </main>
+
+    <!-- IN-PAGE PREVIEW MODAL (Strictly Single Tab) -->
+    <div id="preview-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-file-title">
+        <div class="modal-window">
+            <div class="modal-header">
+                <span class="modal-title" id="modal-file-title">File Preview</span>
+                <button class="modal-close-btn" id="modal-close-btn" aria-label="Close preview">&times;</button>
+            </div>
+            <div class="modal-content" id="modal-body">
+                <!-- Media dynamically injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-wrapper" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
