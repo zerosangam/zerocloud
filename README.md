@@ -35,3 +35,4 @@
 git clone https://github.com/test-book-by-sangam/zerocloud.git
 cd zerocloud
 npm install
+npm run dev
