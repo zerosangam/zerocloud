@@ -30,8 +30,8 @@
 ## 🚀 Getting Started
 
 ### 1. Installation
-
 ```bash
+create .env file and teligram bot api & telegram chinal id 
 git clone https://github.com/test-book-by-sangam/zerocloud.git
 cd zerocloud
 npm install
